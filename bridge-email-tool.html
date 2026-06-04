@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bridge Concerts — Email Drafting Tool</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.7.0/dist/tabler-icons.min.css" />
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f7f6f3;
+    --bg-tertiary: #f0efe9;
+    --text: #1a1a1a;
+    --text-secondary: #6b6a65;
+    --text-tertiary: #9b9a96;
+    --border: rgba(0,0,0,0.12);
+    --border-md: rgba(0,0,0,0.22);
+    --border-strong: rgba(0,0,0,0.35);
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --green: #1D9E75;
+    --amber: #EF9F27;
+    --red: #E24B4A;
+    --font: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e;
+      --bg-secondary: #2c2c2e;
+      --bg-tertiary: #3a3a3c;
+      --text: #f2f2f7;
+      --text-secondary: #aeaeb2;
+      --text-tertiary: #6e6e73;
+      --border: rgba(255,255,255,0.1);
+      --border-md: rgba(255,255,255,0.2);
+      --border-strong: rgba(255,255,255,0.32);
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: var(--bg-tertiary); font-family: var(--font); color: var(--text); }
+
+  header {
+    background: var(--bg);
+    border-bottom: 0.5px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .header-brand {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .header-logo {
+    width: 28px; height: 28px; border-radius: var(--radius-sm);
+    background: var(--text); display: flex; align-items: center; justify-content: center;
+  }
+  .header-logo i { color: var(--bg); font-size: 16px; }
+  .header-title { font-size: 14px; font-weight: 500; }
+  .header-sub { font-size: 12px; color: var(--text-secondary); margin-top: 1px; }
+  .api-key-row { display: flex; align-items: center; gap: 8px; }
+  .api-key-row label { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
+  .api-key-row input {
+    font-size: 12px; width: 240px; padding: 5px 10px;
+    border: 0.5px solid var(--border-md); border-radius: var(--radius-sm);
+    background: var(--bg-secondary); color: var(--text); font-family: var(--font);
+  }
+  .api-status { font-size: 11px; color: var(--text-tertiary); }
+  .api-status.ok { color: var(--green); }
+
+  .main {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) minmax(0,1.35fr);
+    gap: 16px;
+    padding: 20px 24px;
+    max-width: 1300px;
+    margin: 0 auto;
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+  }
+  .panel-title {
+    font-size: 10px; font-weight: 500; letter-spacing: 0.09em;
+    text-transform: uppercase; color: var(--text-secondary); margin-bottom: 1.25rem;
+  }
+  .field-group { margin-bottom: 1rem; }
+  .field-label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 5px; }
+  input[type=text], input[type=password], select, textarea {
+    width: 100%; font-family: var(--font); font-size: 13px;
+    padding: 7px 10px; border: 0.5px solid var(--border-md);
+    border-radius: var(--radius-sm); background: var(--bg-secondary);
+    color: var(--text); outline: none; transition: border-color 0.15s;
+  }
+  input[type=text]:focus, input[type=password]:focus, select:focus, textarea:focus {
+    border-color: var(--border-strong);
+  }
+  select { cursor: pointer; }
+  textarea { resize: vertical; min-height: 64px; line-height: 1.5; }
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .divider { border: none; border-top: 0.5px solid var(--border); margin: 1rem 0; }
+  .section-label {
+    font-size: 10px; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.09em; color: var(--text-secondary); margin-bottom: 8px; display: block;
+  }
+  .field-hint { font-size: 11px; color: var(--text-secondary); margin-top: 4px; line-height: 1.4; }
+
+  .status-row { display: flex; align-items: center; gap: 8px; min-height: 22px; margin-bottom: 6px; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; background: var(--border-md); }
+  .status-dot.researching { background: var(--amber); }
+  .status-dot.ready { background: var(--green); }
+  .status-dot.error { background: var(--red); }
+  .status-text { font-size: 12px; color: var(--text-secondary); }
+  .spinner {
+    display: none; width: 12px; height: 12px; flex-shrink: 0;
+    border: 1.5px solid var(--border-md); border-top-color: var(--amber);
+    border-radius: 50%; animation: spin 0.7s linear infinite;
+  }
+  .spinner.visible { display: block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .research-badge {
+    display: none; font-size: 11px; padding: 2px 8px; border-radius: 20px;
+    background: var(--bg-secondary); border: 0.5px solid var(--border);
+    color: var(--text-secondary);
+  }
+  .research-badge.visible { display: inline-block; }
+
+  .drop-zone {
+    border: 0.5px dashed var(--border-md); border-radius: var(--radius-md);
+    padding: 14px; text-align: center; cursor: pointer;
+    transition: background 0.12s, border-color 0.12s; position: relative;
+    background: var(--bg-secondary);
+  }
+  .drop-zone:hover, .drop-zone.dragover {
+    background: var(--bg-tertiary); border-color: var(--border-strong);
+  }
+  .drop-zone input[type=file] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .drop-zone-label {
+    font-size: 12px; color: var(--text-secondary); pointer-events: none;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .drop-preview { display: none; margin-top: 8px; position: relative; }
+  .drop-preview.visible { display: block; }
+  .drop-preview img {
+    width: 100%; border-radius: var(--radius-sm); border: 0.5px solid var(--border);
+    max-height: 110px; object-fit: cover; object-position: top;
+  }
+  .drop-clear {
+    position: absolute; top: 4px; right: 4px; background: var(--bg);
+    border: 0.5px solid var(--border-md); border-radius: 50%;
+    width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 12px; color: var(--text-secondary); font-family: var(--font);
+  }
+
+  .familiarity-track { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; margin-bottom: 4px; }
+  .fam-btn {
+    padding: 6px 4px; font-size: 11px; font-weight: 500; text-align: center;
+    cursor: pointer; border-radius: var(--radius-sm); border: 0.5px solid var(--border-md);
+    background: transparent; color: var(--text-secondary); font-family: var(--font);
+    line-height: 1.3; transition: all 0.1s;
+  }
+  .fam-btn span { font-weight: 400; opacity: 0.8; display: block; }
+  .fam-btn.active { background: var(--bg-secondary); border-color: var(--border-strong); color: var(--text); }
+  .fam-btn.suggested { border-color: var(--green); color: #0F6E56; }
+  .fam-hint { font-size: 11px; color: var(--text-secondary); min-height: 28px; line-height: 1.4; margin-top: 4px; }
+
+  .mode-toggle {
+    display: grid; grid-template-columns: 1fr 1fr;
+    border: 0.5px solid var(--border-md); border-radius: var(--radius-md);
+    overflow: hidden; margin-bottom: 1rem;
+  }
+  .mode-btn {
+    padding: 8px 6px; font-size: 12px; font-weight: 500; text-align: center;
+    cursor: pointer; background: transparent; border: none; color: var(--text-secondary);
+    font-family: var(--font); line-height: 1.3; transition: all 0.12s;
+  }
+  .mode-btn:first-child { border-right: 0.5px solid var(--border-md); }
+  .mode-btn.active { background: var(--text); color: var(--bg); }
+  .mode-btn span { font-size: 11px; font-weight: 400; opacity: 0.75; display: block; }
+
+  .conditional-block { display: none; }
+  .conditional-block.visible { display: block; }
+
+  .tone-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .tone-label { font-size: 12px; color: var(--text-secondary); }
+  .tone-pill {
+    font-size: 11px; font-weight: 500; padding: 2px 10px; border-radius: 20px;
+    background: var(--bg-secondary); border: 0.5px solid var(--border-md);
+    color: var(--text); min-width: 130px; text-align: center;
+  }
+  .tone-ends { display: flex; justify-content: space-between; margin-top: 5px; }
+  .tone-end { font-size: 11px; color: var(--text-secondary); }
+  input[type=range] {
+    width: 100%; height: 4px; cursor: pointer; accent-color: var(--text);
+    padding: 0; border: none; background: transparent;
+  }
+
+  .generate-btn {
+    width: 100%; padding: 10px; font-size: 13px; font-weight: 500; cursor: pointer;
+    border-radius: var(--radius-md); background: var(--text); color: var(--bg);
+    border: none; margin-top: 4px; transition: opacity 0.15s; font-family: var(--font);
+  }
+  .generate-btn:hover { opacity: 0.82; }
+  .generate-btn:disabled { opacity: 0.3; cursor: default; }
+
+  .subject-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .subject-label {
+    font-size: 10px; color: var(--text-secondary); white-space: nowrap;
+    flex-shrink: 0; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  #subject-field {
+    flex: 1; font-size: 13px; font-weight: 500; background: transparent; border: none;
+    border-bottom: 0.5px solid var(--border); padding: 3px 0; color: var(--text);
+    font-family: var(--font); outline: none;
+  }
+  .draft-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .copy-btn {
+    display: flex; align-items: center; gap: 5px; font-size: 12px; padding: 5px 10px;
+    cursor: pointer; border-radius: var(--radius-sm); background: transparent;
+    border: 0.5px solid var(--border-md); color: var(--text-secondary);
+    font-family: var(--font); transition: background 0.12s;
+  }
+  .copy-btn:hover { background: var(--bg-secondary); }
+  .copy-confirm { font-size: 11px; color: var(--green); display: none; }
+  .copy-confirm.visible { display: inline; }
+  .draft-area {
+    width: 100%; min-height: 480px; font-size: 13px; line-height: 1.7;
+    font-family: var(--font); background: var(--bg-secondary);
+    border: 0.5px solid var(--border); border-radius: var(--radius-md);
+    padding: 14px; color: var(--text); resize: vertical;
+  }
+
+  .agent-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+  .agent-badge {
+    font-size: 11px; padding: 2px 8px; border-radius: 20px;
+    background: var(--bg-secondary); border: 0.5px solid var(--border);
+    color: var(--text-secondary); display: none;
+  }
+  .agent-badge.visible { display: inline-block; }
+
+  footer {
+    text-align: center; padding: 20px; font-size: 11px; color: var(--text-tertiary);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <div class="header-logo"><i class="ti ti-bridge" aria-hidden="true"></i></div>
+    <div>
+      <div class="header-title">Bridge Concerts</div>
+      <div class="header-sub">Agent Email Drafting Tool</div>
+    </div>
+  </div>
+  <div class="api-key-row">
+    <label for="api-key">Anthropic API key</label>
+    <input type="password" id="api-key" placeholder="sk-ant-..." autocomplete="off" />
+    <span class="api-status" id="api-status">Not set</span>
+  </div>
+</header>
+
+<div class="main">
+  <div class="panel">
+    <p class="panel-title">Outreach details</p>
+
+    <div class="row-2">
+      <div class="field-group">
+        <label class="field-label" for="agent-name">Agent name</label>
+        <input type="text" id="agent-name" placeholder="e.g. Cheryl Paglierani" />
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="agency">Agency</label>
+        <input type="text" id="agency" placeholder="e.g. CAA" />
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Rostr screenshot (optional)</label>
+      <div class="drop-zone" id="drop-zone">
+        <input type="file" id="rostr-file" accept="image/*" />
+        <div class="drop-zone-label">
+          <i class="ti ti-photo" style="font-size:16px;" aria-hidden="true"></i>
+          <span>Drop a Rostr roster screenshot or click to upload</span>
+        </div>
+      </div>
+      <div class="drop-preview" id="drop-preview">
+        <img id="drop-img" src="" alt="Rostr screenshot preview" />
+        <button class="drop-clear" id="drop-clear" aria-label="Remove image">×</button>
+      </div>
+      <div class="agent-row">
+        <div class="status-dot" id="agent-dot"></div>
+        <div class="spinner" id="agent-spinner"></div>
+        <span class="status-text" id="agent-status"></span>
+        <span class="agent-badge" id="agent-badge"></span>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="artist-name">Artist</label>
+      <input type="text" id="artist-name" placeholder="e.g. Post Malone" />
+    </div>
+    <div class="status-row">
+      <div class="status-dot" id="research-dot"></div>
+      <div class="spinner" id="research-spinner"></div>
+      <span class="status-text" id="research-status">Enter an artist name to begin research</span>
+      <span class="research-badge" id="research-badge"></span>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="field-group">
+      <label class="field-label">Agent's China familiarity</label>
+      <div class="familiarity-track">
+        <button class="fam-btn" data-level="0" onclick="setFamiliarity(0)">No history<span>First exposure</span></button>
+        <button class="fam-btn active" data-level="1" onclick="setFamiliarity(1)">Some awareness<span>Knows the market</span></button>
+        <button class="fam-btn" data-level="2" onclick="setFamiliarity(2)">Prior China work<span>Has done deals</span></button>
+        <button class="fam-btn" data-level="3" onclick="setFamiliarity(3)">China-active<span>Regularly books</span></button>
+      </div>
+      <p class="fam-hint" id="fam-hint">Skip the basics — acknowledge the market without over-explaining it. Lead with Bridge's specific network and positioning.</p>
+    </div>
+
+    <hr class="divider" />
+
+    <span class="section-label">Outreach mode</span>
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="mode-intro-btn" onclick="setMode('intro')">Market introduction<span>No specific offer yet</span></button>
+      <button class="mode-btn" id="mode-deal-btn" onclick="setMode('deal')">Specific deal pitch<span>Show, dates, offer</span></button>
+    </div>
+
+    <div class="conditional-block visible" id="intro-fields">
+      <div class="field-group">
+        <label class="field-label" for="intro-subtype">Email type</label>
+        <select id="intro-subtype">
+          <option value="cold_intro">Cold introduction — Bridge + China opportunity</option>
+          <option value="followup_intro">Follow-up on prior intro / no response</option>
+          <option value="china_interest">Gauge China interest, no deal attached</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="artist-china-angle">China angle for this artist (optional)</label>
+        <textarea id="artist-china-angle" placeholder="e.g. strong streaming numbers on NetEase, prior Asia buzz, fits Golden Week appetite..." style="min-height:52px;"></textarea>
+        <p class="field-hint">Leave blank to let research inform this.</p>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="intro-context">Additional context</label>
+        <textarea id="intro-context" placeholder="e.g. referred by X, saw them at Y conference, timing hook..." style="min-height:52px;"></textarea>
+      </div>
+    </div>
+
+    <div class="conditional-block" id="deal-fields">
+      <div class="field-group">
+        <label class="field-label" for="outreach-type">Deal type</label>
+        <select id="outreach-type">
+          <option value="initial_pitch">Initial pitch — specific show/tour</option>
+          <option value="routing_inquiry">Routing inquiry — dates available?</option>
+          <option value="followup">Follow-up on prior outreach</option>
+          <option value="counter">Counter / revised offer</option>
+        </select>
+      </div>
+      <div class="row-2">
+        <div class="field-group">
+          <label class="field-label" for="city">City / region</label>
+          <input type="text" id="city" placeholder="e.g. Shanghai, Chengdu" />
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="dates">Date window</label>
+          <input type="text" id="dates" placeholder="e.g. Oct 3–7, 2026" />
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="field-group">
+          <label class="field-label" for="venue-type">Venue type</label>
+          <select id="venue-type">
+            <option value="">Unspecified</option>
+            <option value="stadium">Stadium</option>
+            <option value="arena">Arena</option>
+            <option value="theatre">Theatre / intimate</option>
+            <option value="festival">Festival / outdoor</option>
+            <option value="tbd">TBD — asking their preference</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="capacity">Capacity</label>
+          <input type="text" id="capacity" placeholder="e.g. 60,000" />
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="fee">Fee / guarantee (optional)</label>
+        <input type="text" id="fee" placeholder="e.g. $2M per night" />
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="promoter">Chinese promoter / co-presenter</label>
+        <input type="text" id="promoter" placeholder="e.g. Migu Music, Beijing" />
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="deal-context">Additional context or selling points</label>
+        <textarea id="deal-context" placeholder="e.g. Hainan free-trade zone, prior artist precedents, Asia tour routing..."></textarea>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="field-group">
+      <label class="field-label" for="prior-relationship">Prior relationship note (optional)</label>
+      <input type="text" id="prior-relationship" placeholder="e.g. Met at NACA Chicago, connected via X" />
+    </div>
+
+    <div style="margin-bottom:1rem;">
+      <div class="tone-header">
+        <span class="tone-label">Tone</span>
+        <span class="tone-pill" id="tone-pill">Cordial &amp; direct</span>
+      </div>
+      <input type="range" id="tone-slider" min="1" max="5" step="1" value="3" style="width:100%;" />
+      <div class="tone-ends">
+        <span class="tone-end">Warm &amp; relationship-first</span>
+        <span class="tone-end">Terse &amp; transactional</span>
+      </div>
+    </div>
+
+    <button class="generate-btn" id="generate-btn" disabled>Generate draft</button>
+  </div>
+
+  <div class="panel">
+    <p class="panel-title">Draft</p>
+    <div class="subject-row">
+      <span class="subject-label">Subject</span>
+      <input type="text" id="subject-field" placeholder="Subject line will appear here" />
+    </div>
+    <div class="draft-toolbar">
+      <span style="font-size:11px;color:var(--text-secondary);">Editable — refine before sending</span>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="copy-confirm" id="copy-confirm"><i class="ti ti-check" aria-hidden="true"></i> Copied</span>
+        <button class="copy-btn" onclick="copyDraft()">
+          <i class="ti ti-copy" aria-hidden="true"></i> Copy email
+        </button>
+      </div>
+    </div>
+    <textarea class="draft-area" id="draft-area" placeholder="Fill in the intake form and click Generate draft. The email body will appear here for editing."></textarea>
+  </div>
+</div>
+
+<footer>Bridge Concerts &mdash; Internal tool &mdash; Noah Silverman</footer>
+
+<script>
+const API_KEY_STORAGE = 'bridge_api_key';
+let apiKey = localStorage.getItem(API_KEY_STORAGE) || '';
+let researchData = '', researchArtist = '', researchTimer = null;
+let agentResearchData = '', agentImageBase64 = '', agentImageMime = '';
+let agentResearchTimer = null;
+let currentMode = 'intro', currentFamiliarity = 1;
+
+const FAM_HINTS = {
+  0: 'Explain the China market from the ground up — scale, appetite for Western artists, how promoter partnerships work, and why it is a serious opportunity.',
+  1: "Skip the basics — acknowledge the market without over-explaining it. Lead with Bridge's specific network and positioning.",
+  2: "Peer-to-peer tone. Assume they understand how China deals work. Focus on Bridge's differentiation and promoter depth.",
+  3: 'Cut straight to the point. They know the market. No scene-setting needed. Lead with the specific opportunity or ask.'
+};
+
+const FAM_PROMPTS = {
+  0: "The agent has no prior experience with China. Explain the China market opportunity from scratch: the scale, growing appetite for Western artists, how Chinese promoters work, and the logistics of how Bridge facilitates these deals. Make the case for why China is worth exploring.",
+  1: "The agent has some general awareness of China as a market but has not done deals there. Acknowledge the opportunity without over-explaining it. Focus on Bridge's role as the specialist connector — our promoter network, experience navigating logistics and permitting, and what we make easy for the artist team.",
+  2: "The agent has prior China deal experience. Write peer-to-peer. Skip all market education. Focus on what differentiates Bridge: promoter network depth, specific market positioning, and relevant precedents.",
+  3: "The agent actively and regularly books China. Do not explain anything about the market. Get straight to the point. They will notice and discount any padding."
+};
+
+const TONE_LABELS = {
+  1:'Warm & relationship-first', 2:'Warm & direct', 3:'Cordial & direct',
+  4:'Direct & concise', 5:'Terse & transactional'
+};
+
+const TONE_INSTRUCTIONS = {
+  1: 'Write in a warm, conversational tone. Prioritize relationship building. Acknowledge the artist and their work with genuine enthusiasm. The offer comes after establishing rapport.',
+  2: 'Write with warmth and friendliness. Lead with the offer but keep the tone personal and approachable.',
+  3: 'Cordial but direct. Not salesy. Not overly formal. Lead with the core offer. Include strategic selling points inline. No filler phrases.',
+  4: 'Direct and concise. Lead immediately with the offer. Minimal pleasantries. Every sentence earns its place.',
+  5: 'Terse and transactional. Strip everything to the facts. No pleasantries, no warmup. Short declarative sentences only.'
+};
+
+const $ = id => document.getElementById(id);
+
+function updateApiStatus() {
+  apiKey = $('api-key').value.trim();
+  if (apiKey) {
+    localStorage.setItem(API_KEY_STORAGE, apiKey);
+    $('api-status').textContent = 'Saved';
+    $('api-status').className = 'api-status ok';
+  } else {
+    $('api-status').textContent = 'Not set';
+    $('api-status').className = 'api-status';
+  }
+  checkGenerateReady();
+}
+
+$('api-key').value = apiKey;
+if (apiKey) { $('api-status').textContent = 'Saved'; $('api-status').className = 'api-status ok'; }
+$('api-key').addEventListener('input', updateApiStatus);
+
+$('tone-slider').addEventListener('input', () => { $('tone-pill').textContent = TONE_LABELS[$('tone-slider').value]; });
+
+function setFamiliarity(level, suggested) {
+  currentFamiliarity = level;
+  document.querySelectorAll('.fam-btn').forEach(b => {
+    const l = parseInt(b.dataset.level);
+    b.className = 'fam-btn' + (l === level ? ' active' + (suggested ? ' suggested' : '') : '');
+  });
+  $('fam-hint').textContent = FAM_HINTS[level] + (suggested ? ' (suggested — tap to override)' : '');
+}
+
+function setMode(mode) {
+  currentMode = mode;
+  $('mode-intro-btn').className = 'mode-btn' + (mode === 'intro' ? ' active' : '');
+  $('mode-deal-btn').className = 'mode-btn' + (mode === 'deal' ? ' active' : '');
+  $('intro-fields').className = 'conditional-block' + (mode === 'intro' ? ' visible' : '');
+  $('deal-fields').className = 'conditional-block' + (mode === 'deal' ? ' visible' : '');
+}
+
+function setStatus(state, msg) {
+  $('research-dot').className = 'status-dot' + (state ? ' ' + state : '');
+  $('research-spinner').className = 'spinner' + (state === 'researching' ? ' visible' : '');
+  $('research-status').textContent = msg;
+}
+
+function setAgentStatus(state, msg, badgeText) {
+  $('agent-dot').className = 'status-dot' + (state ? ' ' + state : '');
+  $('agent-spinner').className = 'spinner' + (state === 'researching' ? ' visible' : '');
+  $('agent-status').textContent = msg;
+  if (badgeText) { $('agent-badge').textContent = badgeText; $('agent-badge').className = 'agent-badge visible'; }
+  else { $('agent-badge').className = 'agent-badge'; }
+}
+
+function checkGenerateReady() {
+  $('generate-btn').disabled = !($('artist-name').value.trim() && apiKey);
+}
+
+function triggerAgentResearch() {
+  const name = $('agent-name').value.trim();
+  const agency = $('agency').value.trim();
+  if (!name || !apiKey) return;
+  clearTimeout(agentResearchTimer);
+  setAgentStatus('researching', 'Researching agent...');
+  agentResearchTimer = setTimeout(() => doAgentResearch(name, agency), 900);
+}
+
+$('agent-name').addEventListener('input', triggerAgentResearch);
+$('agency').addEventListener('input', triggerAgentResearch);
+
+async function doAgentResearch(name, agency) {
+  const hasImage = !!agentImageBase64;
+  try {
+    const messages = [];
+    if (hasImage) {
+      messages.push({ role: 'user', content: [
+        { type: 'image', source: { type: 'base64', media_type: agentImageMime, data: agentImageBase64 } },
+        { type: 'text', text: `This is a Rostr screenshot for agent "${name}"${agency ? ' at ' + agency : ''}. Extract all visible artist names and context. Return ONLY a JSON object (no markdown):
+{"agent_bio":"brief summary","roster_artists":["artist1","artist2"],"asia_china_history":"any Asia/China history","genres":"primary genres","china_familiarity_level":0,"china_familiarity_reason":"reason"}` }
+      ]});
+    } else {
+      messages.push({ role: 'user', content: `Research booking agent "${name}"${agency ? ' at ' + agency : ''} for a China concert booking context. Return ONLY a JSON object (no markdown):
+{"agent_bio":"brief summary","roster_artists":["artist1","artist2"],"asia_china_history":"any Asia/China history","genres":"primary genres","china_familiarity_level":0,"china_familiarity_reason":"reason (0=none,1=aware,2=prior deals,3=active)"}` });
+    }
+    const body = { model: 'claude-sonnet-4-20250514', max_tokens: 800, messages };
+    if (!hasImage) body.tools = [{ type: 'web_search_20250305', name: 'web_search' }];
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    let text = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+    text = text.replace(/```json|```/g,'').trim();
+    try {
+      const parsed = JSON.parse(text);
+      agentResearchData = JSON.stringify(parsed);
+      const level = Math.max(0,Math.min(3,typeof parsed.china_familiarity_level==='number'?parsed.china_familiarity_level:1));
+      setFamiliarity(level, true);
+      const count = (parsed.roster_artists||[]).length;
+      setAgentStatus('ready', parsed.agent_bio ? parsed.agent_bio.slice(0,65)+'...' : 'Agent research loaded', count ? count+' roster artists' : null);
+    } catch {
+      agentResearchData = text;
+      setAgentStatus('ready', 'Agent research loaded');
+    }
+  } catch(e) {
+    setAgentStatus('error', 'Agent research failed');
+    agentResearchData = '';
+  }
+}
+
+const rostrFile = $('rostr-file');
+const dropZone = $('drop-zone');
+
+rostrFile.addEventListener('change', e => { if (e.target.files[0]) handleImageFile(e.target.files[0]); });
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('dragover');
+  const f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('image/')) handleImageFile(f);
+});
+
+function handleImageFile(file) {
+  agentImageMime = file.type;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    agentImageBase64 = ev.target.result.split(',')[1];
+    $('drop-img').src = ev.target.result;
+    $('drop-preview').className = 'drop-preview visible';
+    const name = $('agent-name').value.trim();
+    if (name && apiKey) { setAgentStatus('researching','Reading Rostr screenshot...'); doAgentResearch(name,$('agency').value.trim()); }
+    else setAgentStatus('ready','Screenshot loaded — enter agent name to analyze');
+  };
+  reader.readAsDataURL(file);
+}
+
+$('drop-clear').addEventListener('click', () => {
+  agentImageBase64 = ''; agentImageMime = '';
+  $('drop-img').src = ''; $('drop-preview').className = 'drop-preview';
+  rostrFile.value = ''; agentResearchData = '';
+  setAgentStatus('','');
+  if ($('agent-name').value.trim()) triggerAgentResearch();
+});
+
+$('artist-name').addEventListener('input', () => {
+  const val = $('artist-name').value.trim();
+  clearTimeout(researchTimer);
+  checkGenerateReady();
+  if (!val) { setStatus('','Enter an artist name to begin research'); researchData=''; researchArtist=''; $('research-badge').className='research-badge'; return; }
+  if (val === researchArtist) return;
+  if (!apiKey) { setStatus('error','Enter your API key first'); return; }
+  setStatus('researching','Researching ' + val + '...');
+  researchTimer = setTimeout(() => doArtistResearch(val), 900);
+});
+
+async function doArtistResearch(artist) {
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true' },
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514', max_tokens:800,
+        tools:[{type:'web_search_20250305',name:'web_search'}],
+        messages:[{role:'user',content:`Research music artist "${artist}" for concert booking. Return ONLY a JSON object (no markdown):
+{"genre":"primary genres","career_stage":"brief status","china_history":"China/Asia shows or streaming presence","current_touring":"current or upcoming tours","notable_facts":"2-3 booking facts","agent_context":"known agency info"}`}]
+      })
+    });
+    const data = await res.json();
+    let text = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+    text = text.replace(/```json|```/g,'').trim();
+    try {
+      const parsed = JSON.parse(text);
+      researchData = JSON.stringify(parsed); researchArtist = artist;
+      setStatus('ready',(parsed.genre||'')+(parsed.career_stage?' · '+parsed.career_stage:''));
+      $('research-badge').textContent = parsed.current_touring||'Research loaded';
+      $('research-badge').className = 'research-badge visible';
+    } catch { researchData=text; researchArtist=artist; setStatus('ready','Research loaded'); }
+    checkGenerateReady();
+  } catch(e) { setStatus('error','Research failed — you can still generate'); researchData=''; checkGenerateReady(); }
+}
+
+$('generate-btn').addEventListener('click', generateDraft);
+
+async function generateDraft() {
+  const agent = $('agent-name').value.trim();
+  const agency = $('agency').value.trim();
+  const artist = $('artist-name').value.trim();
+  const toneLevel = parseInt($('tone-slider').value);
+  const priorRel = $('prior-relationship').value.trim();
+
+  $('generate-btn').disabled = true;
+  $('generate-btn').textContent = 'Generating...';
+  $('draft-area').value = ''; $('subject-field').value = '';
+
+  let modeContext = '';
+  if (currentMode === 'intro') {
+    const subtype = $('intro-subtype').value;
+    const chinaAngle = $('artist-china-angle').value.trim();
+    const introCtx = $('intro-context').value.trim();
+    const stl = {cold_intro:'cold introduction — Bridge Concerts and the China market opportunity',followup_intro:'follow-up on a prior introduction with no response',china_interest:"gauge the artist's interest in China, no specific deal attached"};
+    modeContext = `OUTREACH MODE: Market introduction — no specific show, date, or promoter attached yet.\nEmail type: ${stl[subtype]||subtype}\nDo NOT invent or imply a specific show, city, date, or promoter. The purpose is to open a dialogue about whether the artist has interest in performing in China. Convey that Bridge will match them with the right promoter partner once there is mutual interest.\nChina angle for this artist: ${chinaAngle||'Use research data.'}\nAdditional context: ${introCtx||'none'}`;
+  } else {
+    const type = $('outreach-type').value;
+    const tl = {initial_pitch:'initial pitch for a specific show',routing_inquiry:'routing inquiry',followup:'follow-up on prior outreach',counter:'counter or revised offer'};
+    modeContext = `OUTREACH MODE: Specific deal pitch.\nEmail type: ${tl[type]||type}\nCity/region: ${$('city').value.trim()||'not specified'}\nDate window: ${$('dates').value.trim()||'not specified'}\nVenue type: ${$('venue-type').value||'not specified'}\nCapacity: ${$('capacity').value.trim()||'not specified'}\nFee/guarantee: ${$('fee').value.trim()||'not specified — do not mention fee'}\nChinese promoter: ${$('promoter').value.trim()||'not specified'}\nAdditional context: ${$('deal-context').value.trim()||'none'}`;
+  }
+
+  const systemPrompt = `You are drafting a professional outreach email on behalf of Noah Silverman at Bridge Concerts (bridgeconcerts.com, +1 215-808-1999, Nsilverman@bridgeconcerts.com).
+
+Bridge Concerts connects established Chinese concert promoters with Western artist teams. They specialize in booking Western artists for Mainland China, with a deep promoter network across major Chinese cities and full experience navigating the Chinese market, permitting, and production requirements.
+
+AGENT CHINA FAMILIARITY:
+${FAM_PROMPTS[currentFamiliarity]}
+
+TONE — ${TONE_LABELS[toneLevel]} (${toneLevel}/5):
+${TONE_INSTRUCTIONS[toneLevel]}
+
+UNIVERSAL RULES:
+- No contractions. No em-dashes. No filler openers or closings ("I hope this finds you well", "I wanted to reach out", "don't hesitate to", "feel free to").
+- Noah has generally not met these agents — treat as first contact unless prior relationship is specified.
+- Include strategic points inline — do not defer everything to a call.
+- Signature: Noah Silverman | Bridge Concerts | Nsilverman@bridgeconcerts.com | +1 (215) 808-1999
+
+OUTPUT: Return ONLY a JSON object (no markdown, no backticks):
+{"subject":"subject line","body":"full email body with actual newlines"}`;
+
+  const userPrompt = `Agent: ${agent||'Unknown'}\nAgency: ${agency||'Unknown'}\nArtist: ${artist}\nPrior relationship: ${priorRel||'none — first contact'}\n\n${modeContext}\n\nArtist research: ${researchData||'not available'}\nAgent research: ${agentResearchData||'not available'}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:systemPrompt,messages:[{role:'user',content:userPrompt}]})
+    });
+    const data = await res.json();
+    let text = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+    text = text.replace(/```json|```/g,'').trim();
+    try {
+      const parsed = JSON.parse(text);
+      $('subject-field').value = parsed.subject||'';
+      $('draft-area').value = parsed.body||text;
+    } catch { $('draft-area').value = text; }
+  } catch(e) { $('draft-area').value = 'Generation failed. Check your API key and try again.'; }
+
+  $('generate-btn').disabled = false;
+  $('generate-btn').textContent = 'Generate draft';
+}
+
+function copyDraft() {
+  const subject = $('subject-field').value.trim();
+  const body = $('draft-area').value.trim();
+  const full = subject ? 'Subject: ' + subject + '\n\n' + body : body;
+  navigator.clipboard.writeText(full).then(() => {
+    $('copy-confirm').className = 'copy-confirm visible';
+    setTimeout(() => $('copy-confirm').className = 'copy-confirm', 2000);
+  });
+}
+</script>
+</body>
+</html>
