@@ -7,53 +7,28 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.7.0/dist/tabler-icons.min.css" />
 <style>
   :root {
-    --bg: #ffffff;
-    --bg-secondary: #f7f6f3;
-    --bg-tertiary: #f0efe9;
-    --text: #1a1a1a;
-    --text-secondary: #6b6a65;
-    --text-tertiary: #9b9a96;
-    --border: rgba(0,0,0,0.12);
-    --border-md: rgba(0,0,0,0.22);
-    --border-strong: rgba(0,0,0,0.35);
-    --radius-sm: 6px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --green: #1D9E75;
-    --amber: #EF9F27;
-    --red: #E24B4A;
+    --bg: #ffffff; --bg-secondary: #f7f6f3; --bg-tertiary: #f0efe9;
+    --text: #1a1a1a; --text-secondary: #6b6a65; --text-tertiary: #9b9a96;
+    --border: rgba(0,0,0,0.12); --border-md: rgba(0,0,0,0.22); --border-strong: rgba(0,0,0,0.35);
+    --radius-sm: 6px; --radius-md: 8px; --radius-lg: 12px;
+    --green: #1D9E75; --amber: #EF9F27; --red: #E24B4A;
     --font: -apple-system, 'Helvetica Neue', Arial, sans-serif;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1c1c1e;
-      --bg-secondary: #2c2c2e;
-      --bg-tertiary: #3a3a3c;
-      --text: #f2f2f7;
-      --text-secondary: #aeaeb2;
-      --text-tertiary: #6e6e73;
-      --border: rgba(255,255,255,0.1);
-      --border-md: rgba(255,255,255,0.2);
-      --border-strong: rgba(255,255,255,0.32);
+      --bg: #1c1c1e; --bg-secondary: #2c2c2e; --bg-tertiary: #3a3a3c;
+      --text: #f2f2f7; --text-secondary: #aeaeb2; --text-tertiary: #6e6e73;
+      --border: rgba(255,255,255,0.1); --border-md: rgba(255,255,255,0.2); --border-strong: rgba(255,255,255,0.32);
     }
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; background: var(--bg-tertiary); font-family: var(--font); color: var(--text); }
-
+  html, body { background: var(--bg-tertiary); font-family: var(--font); color: var(--text); }
   header {
-    background: var(--bg);
-    border-bottom: 0.5px solid var(--border);
-    padding: 14px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 10;
+    background: var(--bg); border-bottom: 0.5px solid var(--border);
+    padding: 14px 24px; display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 10;
   }
-  .header-brand {
-    display: flex; align-items: center; gap: 10px;
-  }
+  .header-brand { display: flex; align-items: center; gap: 10px; }
   .header-logo {
     width: 28px; height: 28px; border-radius: var(--radius-sm);
     background: var(--text); display: flex; align-items: center; justify-content: center;
@@ -66,26 +41,18 @@
   .api-key-row input {
     font-size: 12px; width: 240px; padding: 5px 10px;
     border: 0.5px solid var(--border-md); border-radius: var(--radius-sm);
-    background: var(--bg-secondary); color: var(--text); font-family: var(--font);
+    background: var(--bg-secondary); color: var(--text); font-family: var(--font); outline: none;
   }
-  .api-status { font-size: 11px; color: var(--text-tertiary); }
+  .api-status { font-size: 11px; color: var(--text-tertiary); white-space: nowrap; }
   .api-status.ok { color: var(--green); }
-
+  .api-status.error { color: var(--red); }
   .main {
-    display: grid;
-    grid-template-columns: minmax(0,1fr) minmax(0,1.35fr);
-    gap: 16px;
-    padding: 20px 24px;
-    max-width: 1300px;
-    margin: 0 auto;
-    align-items: start;
+    display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.35fr);
+    gap: 16px; padding: 20px 24px; max-width: 1300px; margin: 0 auto; align-items: start;
   }
-
   .panel {
-    background: var(--bg);
-    border: 0.5px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 1.25rem;
+    background: var(--bg); border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg); padding: 1.25rem;
   }
   .panel-title {
     font-size: 10px; font-weight: 500; letter-spacing: 0.09em;
@@ -94,14 +61,11 @@
   .field-group { margin-bottom: 1rem; }
   .field-label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 5px; }
   input[type=text], input[type=password], select, textarea {
-    width: 100%; font-family: var(--font); font-size: 13px;
-    padding: 7px 10px; border: 0.5px solid var(--border-md);
-    border-radius: var(--radius-sm); background: var(--bg-secondary);
-    color: var(--text); outline: none; transition: border-color 0.15s;
+    width: 100%; font-family: var(--font); font-size: 13px; padding: 7px 10px;
+    border: 0.5px solid var(--border-md); border-radius: var(--radius-sm);
+    background: var(--bg-secondary); color: var(--text); outline: none; transition: border-color 0.15s;
   }
-  input[type=text]:focus, input[type=password]:focus, select:focus, textarea:focus {
-    border-color: var(--border-strong);
-  }
+  input[type=text]:focus, input[type=password]:focus, select:focus, textarea:focus { border-color: var(--border-strong); }
   select { cursor: pointer; }
   textarea { resize: vertical; min-height: 64px; line-height: 1.5; }
   .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -111,7 +75,6 @@
     letter-spacing: 0.09em; color: var(--text-secondary); margin-bottom: 8px; display: block;
   }
   .field-hint { font-size: 11px; color: var(--text-secondary); margin-top: 4px; line-height: 1.4; }
-
   .status-row { display: flex; align-items: center; gap: 8px; min-height: 22px; margin-bottom: 6px; }
   .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; background: var(--border-md); }
   .status-dot.researching { background: var(--amber); }
@@ -125,86 +88,60 @@
   }
   .spinner.visible { display: block; }
   @keyframes spin { to { transform: rotate(360deg); } }
-
   .research-badge {
     display: none; font-size: 11px; padding: 2px 8px; border-radius: 20px;
-    background: var(--bg-secondary); border: 0.5px solid var(--border);
-    color: var(--text-secondary);
+    background: var(--bg-secondary); border: 0.5px solid var(--border); color: var(--text-secondary);
   }
   .research-badge.visible { display: inline-block; }
-
   .drop-zone {
     border: 0.5px dashed var(--border-md); border-radius: var(--radius-md);
     padding: 14px; text-align: center; cursor: pointer;
-    transition: background 0.12s, border-color 0.12s; position: relative;
-    background: var(--bg-secondary);
+    transition: background 0.12s, border-color 0.12s; position: relative; background: var(--bg-secondary);
   }
-  .drop-zone:hover, .drop-zone.dragover {
-    background: var(--bg-tertiary); border-color: var(--border-strong);
-  }
-  .drop-zone input[type=file] {
-    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
-  }
-  .drop-zone-label {
-    font-size: 12px; color: var(--text-secondary); pointer-events: none;
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-  }
+  .drop-zone:hover, .drop-zone.dragover { background: var(--bg-tertiary); border-color: var(--border-strong); }
+  .drop-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .drop-zone-label { font-size: 12px; color: var(--text-secondary); pointer-events: none; display: flex; align-items: center; justify-content: center; gap: 6px; }
   .drop-preview { display: none; margin-top: 8px; position: relative; }
   .drop-preview.visible { display: block; }
-  .drop-preview img {
-    width: 100%; border-radius: var(--radius-sm); border: 0.5px solid var(--border);
-    max-height: 110px; object-fit: cover; object-position: top;
-  }
+  .drop-preview img { width: 100%; border-radius: var(--radius-sm); border: 0.5px solid var(--border); max-height: 110px; object-fit: cover; object-position: top; }
   .drop-clear {
     position: absolute; top: 4px; right: 4px; background: var(--bg);
-    border: 0.5px solid var(--border-md); border-radius: 50%;
-    width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
-    cursor: pointer; font-size: 12px; color: var(--text-secondary); font-family: var(--font);
+    border: 0.5px solid var(--border-md); border-radius: 50%; width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    font-size: 12px; color: var(--text-secondary); font-family: var(--font);
   }
-
   .familiarity-track { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; margin-bottom: 4px; }
   .fam-btn {
-    padding: 6px 4px; font-size: 11px; font-weight: 500; text-align: center;
-    cursor: pointer; border-radius: var(--radius-sm); border: 0.5px solid var(--border-md);
-    background: transparent; color: var(--text-secondary); font-family: var(--font);
-    line-height: 1.3; transition: all 0.1s;
+    padding: 6px 4px; font-size: 11px; font-weight: 500; text-align: center; cursor: pointer;
+    border-radius: var(--radius-sm); border: 0.5px solid var(--border-md);
+    background: transparent; color: var(--text-secondary); font-family: var(--font); line-height: 1.3; transition: all 0.1s;
   }
   .fam-btn span { font-weight: 400; opacity: 0.8; display: block; }
   .fam-btn.active { background: var(--bg-secondary); border-color: var(--border-strong); color: var(--text); }
   .fam-btn.suggested { border-color: var(--green); color: #0F6E56; }
   .fam-hint { font-size: 11px; color: var(--text-secondary); min-height: 28px; line-height: 1.4; margin-top: 4px; }
-
   .mode-toggle {
     display: grid; grid-template-columns: 1fr 1fr;
-    border: 0.5px solid var(--border-md); border-radius: var(--radius-md);
-    overflow: hidden; margin-bottom: 1rem;
+    border: 0.5px solid var(--border-md); border-radius: var(--radius-md); overflow: hidden; margin-bottom: 1rem;
   }
   .mode-btn {
-    padding: 8px 6px; font-size: 12px; font-weight: 500; text-align: center;
-    cursor: pointer; background: transparent; border: none; color: var(--text-secondary);
-    font-family: var(--font); line-height: 1.3; transition: all 0.12s;
+    padding: 8px 6px; font-size: 12px; font-weight: 500; text-align: center; cursor: pointer;
+    background: transparent; border: none; color: var(--text-secondary); font-family: var(--font); line-height: 1.3; transition: all 0.12s;
   }
   .mode-btn:first-child { border-right: 0.5px solid var(--border-md); }
   .mode-btn.active { background: var(--text); color: var(--bg); }
   .mode-btn span { font-size: 11px; font-weight: 400; opacity: 0.75; display: block; }
-
   .conditional-block { display: none; }
   .conditional-block.visible { display: block; }
-
   .tone-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
   .tone-label { font-size: 12px; color: var(--text-secondary); }
   .tone-pill {
     font-size: 11px; font-weight: 500; padding: 2px 10px; border-radius: 20px;
-    background: var(--bg-secondary); border: 0.5px solid var(--border-md);
-    color: var(--text); min-width: 130px; text-align: center;
+    background: var(--bg-secondary); border: 0.5px solid var(--border-md); color: var(--text); min-width: 130px; text-align: center;
   }
   .tone-ends { display: flex; justify-content: space-between; margin-top: 5px; }
   .tone-end { font-size: 11px; color: var(--text-secondary); }
-  input[type=range] {
-    width: 100%; height: 4px; cursor: pointer; accent-color: var(--text);
-    padding: 0; border: none; background: transparent;
-  }
-
+  input[type=range] { width: 100%; height: 4px; cursor: pointer; accent-color: var(--text); padding: 0; border: none; background: transparent; }
   .generate-btn {
     width: 100%; padding: 10px; font-size: 13px; font-weight: 500; cursor: pointer;
     border-radius: var(--radius-md); background: var(--text); color: var(--bg);
@@ -212,7 +149,15 @@
   }
   .generate-btn:hover { opacity: 0.82; }
   .generate-btn:disabled { opacity: 0.3; cursor: default; }
-
+  .error-bar {
+    display: none; margin-top: 8px; padding: 8px 12px; border-radius: var(--radius-sm);
+    background: #FCEBEB; border: 0.5px solid #F09595; color: #A32D2D;
+    font-size: 12px; line-height: 1.5; word-break: break-word;
+  }
+  .error-bar.visible { display: block; }
+  @media (prefers-color-scheme: dark) {
+    .error-bar { background: #3a1f1f; border-color: #7a3030; color: #F09595; }
+  }
   .subject-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
   .subject-label {
     font-size: 10px; color: var(--text-secondary); white-space: nowrap;
@@ -220,37 +165,29 @@
   }
   #subject-field {
     flex: 1; font-size: 13px; font-weight: 500; background: transparent; border: none;
-    border-bottom: 0.5px solid var(--border); padding: 3px 0; color: var(--text);
-    font-family: var(--font); outline: none;
+    border-bottom: 0.5px solid var(--border); padding: 3px 0; color: var(--text); font-family: var(--font); outline: none;
   }
   .draft-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
   .copy-btn {
-    display: flex; align-items: center; gap: 5px; font-size: 12px; padding: 5px 10px;
-    cursor: pointer; border-radius: var(--radius-sm); background: transparent;
-    border: 0.5px solid var(--border-md); color: var(--text-secondary);
-    font-family: var(--font); transition: background 0.12s;
+    display: flex; align-items: center; gap: 5px; font-size: 12px; padding: 5px 10px; cursor: pointer;
+    border-radius: var(--radius-sm); background: transparent; border: 0.5px solid var(--border-md);
+    color: var(--text-secondary); font-family: var(--font); transition: background 0.12s;
   }
   .copy-btn:hover { background: var(--bg-secondary); }
   .copy-confirm { font-size: 11px; color: var(--green); display: none; }
   .copy-confirm.visible { display: inline; }
   .draft-area {
-    width: 100%; min-height: 480px; font-size: 13px; line-height: 1.7;
-    font-family: var(--font); background: var(--bg-secondary);
-    border: 0.5px solid var(--border); border-radius: var(--radius-md);
+    width: 100%; min-height: 480px; font-size: 13px; line-height: 1.7; font-family: var(--font);
+    background: var(--bg-secondary); border: 0.5px solid var(--border); border-radius: var(--radius-md);
     padding: 14px; color: var(--text); resize: vertical;
   }
-
   .agent-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
   .agent-badge {
     font-size: 11px; padding: 2px 8px; border-radius: 20px;
-    background: var(--bg-secondary); border: 0.5px solid var(--border);
-    color: var(--text-secondary); display: none;
+    background: var(--bg-secondary); border: 0.5px solid var(--border); color: var(--text-secondary); display: none;
   }
   .agent-badge.visible { display: inline-block; }
-
-  footer {
-    text-align: center; padding: 20px; font-size: 11px; color: var(--text-tertiary);
-  }
+  footer { text-align: center; padding: 20px; font-size: 11px; color: var(--text-tertiary); }
 </style>
 </head>
 <body>
@@ -349,7 +286,7 @@
       </div>
       <div class="field-group">
         <label class="field-label" for="artist-china-angle">China angle for this artist (optional)</label>
-        <textarea id="artist-china-angle" placeholder="e.g. strong streaming numbers on NetEase, prior Asia buzz, fits Golden Week appetite..." style="min-height:52px;"></textarea>
+        <textarea id="artist-china-angle" placeholder="e.g. strong streaming numbers on NetEase, prior Asia buzz..." style="min-height:52px;"></textarea>
         <p class="field-hint">Leave blank to let research inform this.</p>
       </div>
       <div class="field-group">
@@ -429,6 +366,7 @@
     </div>
 
     <button class="generate-btn" id="generate-btn" disabled>Generate draft</button>
+    <div class="error-bar" id="error-bar"></div>
   </div>
 
   <div class="panel">
@@ -464,30 +402,33 @@ const FAM_HINTS = {
   0: 'Explain the China market from the ground up — scale, appetite for Western artists, how promoter partnerships work, and why it is a serious opportunity.',
   1: "Skip the basics — acknowledge the market without over-explaining it. Lead with Bridge's specific network and positioning.",
   2: "Peer-to-peer tone. Assume they understand how China deals work. Focus on Bridge's differentiation and promoter depth.",
-  3: 'Cut straight to the point. They know the market. No scene-setting needed. Lead with the specific opportunity or ask.'
+  3: 'Cut straight to the point. They know the market. No scene-setting. Lead with the specific opportunity or ask.'
 };
-
 const FAM_PROMPTS = {
-  0: "The agent has no prior experience with China. Explain the China market opportunity from scratch: the scale, growing appetite for Western artists, how Chinese promoters work, and the logistics of how Bridge facilitates these deals. Make the case for why China is worth exploring.",
-  1: "The agent has some general awareness of China as a market but has not done deals there. Acknowledge the opportunity without over-explaining it. Focus on Bridge's role as the specialist connector — our promoter network, experience navigating logistics and permitting, and what we make easy for the artist team.",
+  0: "The agent has no prior experience with China. Explain the China market opportunity from scratch: the scale, growing appetite for Western artists, how Chinese promoters work, and the logistics of how Bridge facilitates these deals.",
+  1: "The agent has some general awareness of China as a market but has not done deals there. Focus on Bridge's role as the specialist connector — our promoter network, experience navigating logistics and permitting, and what we make easy for the artist team.",
   2: "The agent has prior China deal experience. Write peer-to-peer. Skip all market education. Focus on what differentiates Bridge: promoter network depth, specific market positioning, and relevant precedents.",
   3: "The agent actively and regularly books China. Do not explain anything about the market. Get straight to the point. They will notice and discount any padding."
 };
-
-const TONE_LABELS = {
-  1:'Warm & relationship-first', 2:'Warm & direct', 3:'Cordial & direct',
-  4:'Direct & concise', 5:'Terse & transactional'
-};
-
+const TONE_LABELS = {1:'Warm & relationship-first',2:'Warm & direct',3:'Cordial & direct',4:'Direct & concise',5:'Terse & transactional'};
 const TONE_INSTRUCTIONS = {
-  1: 'Write in a warm, conversational tone. Prioritize relationship building. Acknowledge the artist and their work with genuine enthusiasm. The offer comes after establishing rapport.',
-  2: 'Write with warmth and friendliness. Lead with the offer but keep the tone personal and approachable.',
-  3: 'Cordial but direct. Not salesy. Not overly formal. Lead with the core offer. Include strategic selling points inline. No filler phrases.',
-  4: 'Direct and concise. Lead immediately with the offer. Minimal pleasantries. Every sentence earns its place.',
-  5: 'Terse and transactional. Strip everything to the facts. No pleasantries, no warmup. Short declarative sentences only.'
+  1:'Write in a warm, conversational tone. Prioritize relationship building. Acknowledge the artist with genuine enthusiasm. The offer comes after establishing rapport.',
+  2:'Write with warmth and friendliness. Lead with the offer but keep the tone personal and approachable.',
+  3:'Cordial but direct. Not salesy. Not overly formal. Lead with the core offer. Include strategic selling points inline. No filler phrases.',
+  4:'Direct and concise. Lead immediately with the offer. Minimal pleasantries. Every sentence earns its place.',
+  5:'Terse and transactional. Strip everything to the facts. No pleasantries, no warmup. Short declarative sentences only.'
 };
 
 const $ = id => document.getElementById(id);
+
+function showError(msg) {
+  const bar = $('error-bar');
+  bar.textContent = msg;
+  bar.className = 'error-bar visible';
+}
+function clearError() {
+  $('error-bar').className = 'error-bar';
+}
 
 function updateApiStatus() {
   apiKey = $('api-key').value.trim();
@@ -496,6 +437,7 @@ function updateApiStatus() {
     $('api-status').textContent = 'Saved';
     $('api-status').className = 'api-status ok';
   } else {
+    localStorage.removeItem(API_KEY_STORAGE);
     $('api-status').textContent = 'Not set';
     $('api-status').className = 'api-status';
   }
@@ -505,7 +447,6 @@ function updateApiStatus() {
 $('api-key').value = apiKey;
 if (apiKey) { $('api-status').textContent = 'Saved'; $('api-status').className = 'api-status ok'; }
 $('api-key').addEventListener('input', updateApiStatus);
-
 $('tone-slider').addEventListener('input', () => { $('tone-pill').textContent = TONE_LABELS[$('tone-slider').value]; });
 
 function setFamiliarity(level, suggested) {
@@ -562,12 +503,10 @@ async function doAgentResearch(name, agency) {
     if (hasImage) {
       messages.push({ role: 'user', content: [
         { type: 'image', source: { type: 'base64', media_type: agentImageMime, data: agentImageBase64 } },
-        { type: 'text', text: `This is a Rostr screenshot for agent "${name}"${agency ? ' at ' + agency : ''}. Extract all visible artist names and context. Return ONLY a JSON object (no markdown):
-{"agent_bio":"brief summary","roster_artists":["artist1","artist2"],"asia_china_history":"any Asia/China history","genres":"primary genres","china_familiarity_level":0,"china_familiarity_reason":"reason"}` }
+        { type: 'text', text: `This is a Rostr screenshot for agent "${name}"${agency ? ' at ' + agency : ''}. Extract all visible artist names and context. Return ONLY a JSON object (no markdown, no backticks): {"agent_bio":"brief summary","roster_artists":["artist1"],"asia_china_history":"any Asia/China history","genres":"primary genres","china_familiarity_level":0,"china_familiarity_reason":"reason"}` }
       ]});
     } else {
-      messages.push({ role: 'user', content: `Research booking agent "${name}"${agency ? ' at ' + agency : ''} for a China concert booking context. Return ONLY a JSON object (no markdown):
-{"agent_bio":"brief summary","roster_artists":["artist1","artist2"],"asia_china_history":"any Asia/China history","genres":"primary genres","china_familiarity_level":0,"china_familiarity_reason":"reason (0=none,1=aware,2=prior deals,3=active)"}` });
+      messages.push({ role: 'user', content: `Research booking agent "${name}"${agency ? ' at ' + agency : ''} for a China concert booking context. Return ONLY a JSON object (no markdown, no backticks): {"agent_bio":"brief summary","roster_artists":["artist1"],"asia_china_history":"any Asia/China history","genres":"primary genres","china_familiarity_level":1,"china_familiarity_reason":"reason (0=none,1=aware,2=prior deals,3=active)"}` });
     }
     const body = { model: 'claude-sonnet-4-20250514', max_tokens: 800, messages };
     if (!hasImage) body.tools = [{ type: 'web_search_20250305', name: 'web_search' }];
@@ -576,6 +515,11 @@ async function doAgentResearch(name, agency) {
       headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
       body: JSON.stringify(body)
     });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      setAgentStatus('error', 'Agent research failed: ' + (err.error?.message || res.status));
+      return;
+    }
     const data = await res.json();
     let text = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
     text = text.replace(/```json|```/g,'').trim();
@@ -591,14 +535,13 @@ async function doAgentResearch(name, agency) {
       setAgentStatus('ready', 'Agent research loaded');
     }
   } catch(e) {
-    setAgentStatus('error', 'Agent research failed');
+    setAgentStatus('error', 'Agent research failed: ' + e.message);
     agentResearchData = '';
   }
 }
 
 const rostrFile = $('rostr-file');
 const dropZone = $('drop-zone');
-
 rostrFile.addEventListener('change', e => { if (e.target.files[0]) handleImageFile(e.target.files[0]); });
 dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
@@ -649,10 +592,14 @@ async function doArtistResearch(artist) {
       body: JSON.stringify({
         model:'claude-sonnet-4-20250514', max_tokens:800,
         tools:[{type:'web_search_20250305',name:'web_search'}],
-        messages:[{role:'user',content:`Research music artist "${artist}" for concert booking. Return ONLY a JSON object (no markdown):
-{"genre":"primary genres","career_stage":"brief status","china_history":"China/Asia shows or streaming presence","current_touring":"current or upcoming tours","notable_facts":"2-3 booking facts","agent_context":"known agency info"}`}]
+        messages:[{role:'user',content:`Research music artist "${artist}" for concert booking. Return ONLY a JSON object (no markdown, no backticks): {"genre":"primary genres","career_stage":"brief status","china_history":"China/Asia presence","current_touring":"current or upcoming tours","notable_facts":"2-3 booking facts","agent_context":"known agency info"}`}]
       })
     });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      setStatus('error', 'Research failed: ' + (err.error?.message || res.status));
+      checkGenerateReady(); return;
+    }
     const data = await res.json();
     let text = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
     text = text.replace(/```json|```/g,'').trim();
@@ -664,15 +611,19 @@ async function doArtistResearch(artist) {
       $('research-badge').className = 'research-badge visible';
     } catch { researchData=text; researchArtist=artist; setStatus('ready','Research loaded'); }
     checkGenerateReady();
-  } catch(e) { setStatus('error','Research failed — you can still generate'); researchData=''; checkGenerateReady(); }
+  } catch(e) { setStatus('error','Research failed: '+e.message); researchData=''; checkGenerateReady(); }
 }
 
 $('generate-btn').addEventListener('click', generateDraft);
 
 async function generateDraft() {
+  clearError();
+  if (!apiKey) { showError('API key is not set. Paste your Anthropic API key in the field at the top of the page.'); return; }
+  const artist = $('artist-name').value.trim();
+  if (!artist) { showError('Enter an artist name before generating.'); return; }
+
   const agent = $('agent-name').value.trim();
   const agency = $('agency').value.trim();
-  const artist = $('artist-name').value.trim();
   const toneLevel = parseInt($('tone-slider').value);
   const priorRel = $('prior-relationship').value.trim();
 
@@ -709,17 +660,22 @@ UNIVERSAL RULES:
 - Include strategic points inline — do not defer everything to a call.
 - Signature: Noah Silverman | Bridge Concerts | Nsilverman@bridgeconcerts.com | +1 (215) 808-1999
 
-OUTPUT: Return ONLY a JSON object (no markdown, no backticks):
-{"subject":"subject line","body":"full email body with actual newlines"}`;
+OUTPUT: Return ONLY a JSON object (no markdown, no backticks): {"subject":"subject line","body":"full email body with actual newlines"}`;
 
   const userPrompt = `Agent: ${agent||'Unknown'}\nAgency: ${agency||'Unknown'}\nArtist: ${artist}\nPrior relationship: ${priorRel||'none — first contact'}\n\n${modeContext}\n\nArtist research: ${researchData||'not available'}\nAgent research: ${agentResearchData||'not available'}`;
 
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:systemPrompt,messages:[{role:'user',content:userPrompt}]})
+      method: 'POST',
+      headers: {'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body: JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:systemPrompt,messages:[{role:'user',content:userPrompt}]})
     });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      const msg = err.error?.message || 'HTTP ' + res.status;
+      showError('API error: ' + msg + (res.status === 401 ? ' — check that your API key is correct.' : ''));
+      $('generate-btn').disabled = false; $('generate-btn').textContent = 'Generate draft'; return;
+    }
     const data = await res.json();
     let text = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
     text = text.replace(/```json|```/g,'').trim();
@@ -728,7 +684,9 @@ OUTPUT: Return ONLY a JSON object (no markdown, no backticks):
       $('subject-field').value = parsed.subject||'';
       $('draft-area').value = parsed.body||text;
     } catch { $('draft-area').value = text; }
-  } catch(e) { $('draft-area').value = 'Generation failed. Check your API key and try again.'; }
+  } catch(e) {
+    showError('Request failed: ' + e.message + '. This may be a network or CORS issue — try opening the tool locally rather than via GitHub Pages.');
+  }
 
   $('generate-btn').disabled = false;
   $('generate-btn').textContent = 'Generate draft';
